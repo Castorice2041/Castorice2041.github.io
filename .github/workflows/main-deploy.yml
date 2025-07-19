@@ -1,0 +1,61 @@
+name: Build and Deploy GitBook on Main Branch
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout main branch
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js 11
+      uses: actions/setup-node@v4
+      with:
+        node-version: '11'
+
+    - name: Install GitBook CLI
+      run: npm install -g gitbook-cli@2.3.2
+
+    - name: Install plugins
+      run: gitbook install
+
+    - name: Build GitBook
+      run: gitbook build
+
+    - name: Deploy to root of main branch
+      run: |
+        # 配置git
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        
+        # 备份源文件到临时目录
+        mkdir -p /tmp/source-backup
+        rsync -av --exclude='_book' --exclude='.git' --exclude='node_modules' . /tmp/source-backup/
+        
+        # 清空当前目录（除了.git）
+        find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
+        
+        # 复制构建结果到根目录
+        cp -r _book/* .
+        cp _book/.* . 2>/dev/null || true
+        
+        # 添加.nojekyll文件确保GitHub Pages正常工作
+        echo "" > .nojekyll
+        
+        # 恢复源文件到src目录（可选，用于备份）
+        mkdir -p src
+        cp -r /tmp/source-backup/* src/ 2>/dev/null || true
+        
+        # 提交更改
+        git add .
+        git commit -m "Auto-deploy GitBook - $(date +'%Y-%m-%d %H:%M:%S')" || exit 0
+        git push origin main
