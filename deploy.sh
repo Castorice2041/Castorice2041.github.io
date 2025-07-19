@@ -12,14 +12,14 @@ fi
 
 echo "构建完成！"
 
-# 进入_book目录
-cd _book
+# 先提交源代码变更到source分支
+echo "提交源代码变更..."
+git add .
+git commit -m "Update source files - $(date +'%Y-%m-%d %H:%M:%S')"
+git push origin master:source
 
-# 初始化git（如果需要）
-if [ ! -d ".git" ]; then
-    git init
-    git remote add origin https://github.com/Castorice2041/Castorice2041.github.io.git
-fi
+# 进入_book目录进行部署
+cd _book
 
 # 添加所有文件
 git add .
@@ -27,9 +27,12 @@ git add .
 # 提交
 git commit -m "Deploy GitBook to GitHub Pages - $(date +'%Y-%m-%d %H:%M:%S')"
 
-# 强制推送到main分支（GitHub Pages默认分支）
-git push -f origin master:main
+# 推送到main分支（GitHub Pages分支）
+git push origin main
 
-echo "部署完成！访问 https://castorice2041.github.io 查看您的博客"
+echo "部署完成！"
+echo "源代码已推送到 source 分支"
+echo "网站已部署到 main 分支"
+echo "访问 https://castorice2041.github.io 查看您的博客"
 
 cd ..
