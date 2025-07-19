@@ -17,10 +17,10 @@ jobs:
       with:
         ref: source
 
-    - name: Setup Node.js 10 (最稳定版本)
+    - name: Setup Node.js 11 (最稳定版本)
       uses: actions/setup-node@v3
       with:
-        node-version: '10'
+        node-version: '11'
 
     - name: Install GitBook CLI
       run: |

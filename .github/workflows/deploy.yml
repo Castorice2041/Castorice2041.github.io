@@ -21,12 +21,20 @@ jobs:
         ref: source
         fetch-depth: 0
 
-    - name: Build GitBook with Docker
+    - name: Setup Node.js 11
+      uses: actions/setup-node@v4
+      with:
+        node-version: '11'
+
+    - name: Install GitBook CLI
+      run: npm install -g gitbook-cli@2.3.2
+
+    - name: Install GitBook and plugins
       run: |
-        # 使用Docker运行GitBook构建
-        docker run --rm -v $(pwd):/gitbook -w /gitbook \
-          billryan/gitbook:latest \
-          sh -c "gitbook install && gitbook build"
+        gitbook install
+        
+    - name: Build GitBook
+      run: gitbook build
 
     - name: Deploy to main branch
       run: |
