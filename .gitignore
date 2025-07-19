@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+
+# GitBook build output
+_book/
+
+# GitBook临时文件
+.grunt
+
+# npm日志
+npm-debug.log*
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE配置文件
+.vscode/
+.idea/
+
+# 临时文件
+*.tmp
+*.temp

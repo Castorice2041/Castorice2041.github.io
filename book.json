@@ -1,0 +1,38 @@
+{
+  "title": "华深的博客",
+  "description": "个人技术博客",
+  "author": "华深",
+  "language": "zh-hans",
+  "gitbook": "3.2.3",
+  "plugins": [
+    "hide-element",
+    "chapter-fold",
+    "katex",
+    "alerts",
+    "emphasize",
+    "prism",
+    "-highlight",
+    "localized-footer",
+    "mermaid-gb3",
+    "accordion",
+    "search",
+    "lunr",
+    "fontsettings"
+  ],
+  "pluginsConfig": {
+    "hide-element": {
+      "elements": [
+        ".gitbook-link"
+      ]
+    },
+    "fontsettings": {
+      "theme": "white",
+      "family": "serif",
+      "size": 2
+    },
+    "localized-footer": {
+      "hline": true,
+      "filename": "./FOOTER.md"
+    }
+  }
+}

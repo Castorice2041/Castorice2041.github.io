@@ -1,0 +1,28 @@
+{
+  "name": "huashen-blog",
+  "version": "1.0.0",
+  "description": "华深的个人技术博客",
+  "main": "index.js",
+  "scripts": {
+    "serve": "gitbook serve",
+    "build": "gitbook build",
+    "install": "gitbook install",
+    "pdf": "gitbook pdf . ./blog.pdf"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "blog",
+    "technology",
+    "database",
+    "distributed-systems",
+    "java"
+  ],
+  "author": "华深",
+  "license": "MIT",
+  "devDependencies": {
+    "gitbook-cli": "^2.3.2"
+  }
+}
