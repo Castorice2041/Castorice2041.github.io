@@ -31,11 +31,16 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '11'
         cache: 'npm'
 
     - name: Install GitBook CLI
       run: npm install -g gitbook-cli
+
+    - name: Fix graceful-fs issue
+      run: |
+        cd $(npm root -g)/gitbook-cli/node_modules/npm/node_modules
+        npm install graceful-fs@4.2.0 --save
 
     - name: Install dependencies
       run: |
