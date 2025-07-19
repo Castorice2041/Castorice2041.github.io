@@ -1,0 +1,59 @@
+name: Simple Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ source ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source branch
+      uses: actions/checkout@v4
+      with:
+        ref: source
+
+    - name: Setup Node.js 10 (最稳定版本)
+      uses: actions/setup-node@v3
+      with:
+        node-version: '10'
+
+    - name: Install GitBook CLI
+      run: |
+        npm install -g gitbook-cli@2.3.2
+        npm install -g graceful-fs@4.2.0
+
+    - name: Install and Build
+      run: |
+        gitbook install
+        gitbook build
+
+    - name: Deploy to main branch
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        
+        # 创建一个新的孤立分支
+        git checkout --orphan temp-main
+        
+        # 删除除了 _book 之外的所有文件
+        find . -maxdepth 1 ! -name '_book' ! -name '.' ! -name '.git' -exec rm -rf {} +
+        
+        # 将 _book 的内容移到根目录
+        mv _book/* .
+        mv _book/.[^.]* . 2>/dev/null || true
+        rmdir _book
+        
+        # 添加 .nojekyll 文件
+        echo "" > .nojekyll
+        
+        # 提交所有文件
+        git add .
+        git commit -m "Deploy GitBook $(date +'%Y-%m-%d %H:%M:%S')"
+        
+        # 强制推送到 main 分支
+        git push origin temp-main:main --force

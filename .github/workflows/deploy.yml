@@ -21,27 +21,12 @@ jobs:
         ref: source
         fetch-depth: 0
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '11'
-        cache: 'npm'
-
-    - name: Install GitBook CLI
-      run: npm install -g gitbook-cli
-
-    - name: Fix graceful-fs issue
+    - name: Build GitBook with Docker
       run: |
-        cd $(npm root -g)/gitbook-cli/node_modules/npm/node_modules
-        npm install graceful-fs@4.2.0 --save
-
-    - name: Install dependencies
-      run: |
-        npm install
-        gitbook install
-
-    - name: Build GitBook
-      run: gitbook build
+        # 使用Docker运行GitBook构建
+        docker run --rm -v $(pwd):/gitbook -w /gitbook \
+          billryan/gitbook:latest \
+          sh -c "gitbook install && gitbook build"
 
     - name: Deploy to main branch
       run: |
